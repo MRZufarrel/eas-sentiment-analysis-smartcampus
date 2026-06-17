@@ -4,4 +4,4 @@ numpy
 requests
 wordcloud
 matplotlib
-plotly
+plotly==5.22.0
