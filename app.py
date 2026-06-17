@@ -458,4 +458,172 @@ elif page == "📈  Tren & Kategori":
         xaxis=dict(gridcolor='rgba(255,255,255,0.05)',title=''),
         yaxis=dict(gridcolor='rgba(255,255,255,0.05)',title='Confidence (%)'),
         margin=dict(t=50,b=20,l=20,r=20), height=320)
-    st.plotly_chart(fig_box
+    st.plotly_chart(fig_box, use_container_width=True)
+
+# ════════════════════════════════════════════════════════════
+#  PAGE: WORD CLOUD
+# ════════════════════════════════════════════════════════════
+elif page == "☁️   Word Cloud":
+    st.markdown("### ☁️ Word Cloud & Kata Kunci per Sentimen")
+    cmaps = {'Positif':'Greens','Netral':'cool','Negatif':'Reds'}
+    cols  = st.columns(3)
+    for col, sent in zip(cols, ['Positif','Netral','Negatif']):
+        with col:
+            color = COLOR_MAP[sent]
+            words = clean_words(df[df['sentimen']==sent]['komentar'].tolist())
+            st.markdown(f"""
+            <div style='text-align:center;padding:10px 0 8px;font-weight:800;
+                 font-size:16px;color:{color}'>{EMOJI_MAP[sent]} {sent}
+              <span style='font-size:11px;color:rgba(255,255,255,0.3);font-weight:400;
+                   font-family:DM Mono,monospace;margin-left:6px'>
+                {len(df[df['sentimen']==sent])} komentar
+              </span>
+            </div>""", unsafe_allow_html=True)
+            wc = make_wc(words, cmaps[sent])
+            if wc:
+                fig, ax = plt.subplots(figsize=(5, 2.7), facecolor='#0d1120')
+                ax.imshow(wc, interpolation='bilinear'); ax.axis('off')
+                st.pyplot(fig, use_container_width=True); plt.close()
+            freq = Counter(words).most_common(8)
+            if freq:
+                wf   = pd.DataFrame(freq, columns=['Kata','Frekuensi'])
+                fig2 = px.bar(wf, x='Frekuensi', y='Kata', orientation='h',
+                              color_discrete_sequence=[color])
+                fig2.update_layout(
+                    paper_bgcolor='#0d1120', plot_bgcolor='#0d1120',
+                    font=dict(color='rgba(255,255,255,0.6)',size=11),
+                    margin=dict(t=6,b=6,l=6,r=6), height=230, showlegend=False,
+                    xaxis=dict(gridcolor='rgba(255,255,255,0.05)'),
+                    yaxis=dict(gridcolor='rgba(255,255,255,0.05)'))
+                st.plotly_chart(fig2, use_container_width=True)
+
+# ════════════════════════════════════════════════════════════
+#  PAGE: DETAIL KOMENTAR
+# ════════════════════════════════════════════════════════════
+elif page == "💬  Detail Komentar":
+    st.markdown("### 💬 Detail Komentar Mahasiswa")
+    col_s, col_k = st.columns(2)
+    with col_s: sel_sent = st.selectbox("Filter Sentimen:", ['Semua','Positif','Netral','Negatif'])
+    with col_k: sel_kat  = st.selectbox("Filter Kategori:", ['Semua']+sorted(df['kategori'].unique().tolist()))
+    df_show = df.copy()
+    if sel_sent != 'Semua': df_show = df_show[df_show['sentimen']==sel_sent]
+    if sel_kat  != 'Semua': df_show = df_show[df_show['kategori']==sel_kat]
+    st.caption(f"Menampilkan {len(df_show)} komentar")
+    for _, row in df_show.iterrows():
+        c  = COLOR_MAP[row['sentimen']]; em = EMOJI_MAP[row['sentimen']]
+        conf_bar = int(row['confidence'])
+        st.markdown(f"""
+        <div style='background:rgba(255,255,255,0.025);border:1px solid rgba(255,255,255,0.06);
+             border-left:3px solid {c};border-radius:14px;padding:16px 18px;margin-bottom:12px'>
+          <div style='display:flex;justify-content:space-between;align-items:center;margin-bottom:10px'>
+            <span style='font-size:10px;color:rgba(255,255,255,0.3);font-family:DM Mono,monospace'>
+              #{row['id']} · {row['kategori']} · {row['tanggal']}
+            </span>
+            <span style='background:{c}22;color:{c};padding:3px 12px;
+                  border-radius:20px;font-size:11px;font-weight:700'>
+              {em} {row['sentimen']} · {row['confidence']}%
+            </span>
+          </div>
+          <div style='font-size:14px;color:rgba(255,255,255,0.82);line-height:1.65;margin-bottom:10px'>
+            {row['komentar']}
+          </div>
+          <div style='background:rgba(255,255,255,0.05);border-radius:20px;height:4px'>
+            <div style='background:{c};border-radius:20px;height:4px;width:{conf_bar}%'></div>
+          </div>
+        </div>""", unsafe_allow_html=True)
+
+# ════════════════════════════════════════════════════════════
+#  PAGE: UJI TEKS BARU
+# ════════════════════════════════════════════════════════════
+elif page == "🔍  Uji Teks Baru":
+    st.markdown("### 🔍 Analisis Komentar Baru secara Real-Time")
+    tab1, tab2 = st.tabs(["✏️ Satu Komentar", "📋 Banyak Komentar"])
+
+    with tab1:
+        user_text = st.text_area("Masukkan komentar:", height=130,
+            placeholder="Contoh: Fasilitas kampus sangat bagus dan lengkap...")
+        if st.button("🚀 Analisis", key="single"):
+            if user_text.strip():
+                with st.spinner("Menganalisis..."):
+                    label, score_val = call_api(preprocess(user_text), token)
+                    color = COLOR_MAP[label]; emoji = EMOJI_MAP[label]
+                col_res, col_info = st.columns(2)
+                with col_res:
+                    st.markdown(f"""
+                    <div style='background:#0d1120;border:2px solid {color};
+                         border-radius:20px;padding:32px;text-align:center'>
+                      <div style='font-size:54px;margin-bottom:14px'>{emoji}</div>
+                      <div style='font-size:24px;font-weight:800;color:{color};margin-bottom:6px'>{label}</div>
+                      <div style='font-size:44px;font-weight:800;color:white'>{score_val}%</div>
+                      <div style='font-size:11px;color:rgba(255,255,255,0.35);font-family:DM Mono,monospace'>
+                        Confidence Score
+                      </div>
+                    </div>""", unsafe_allow_html=True)
+                with col_info:
+                    st.markdown("**Preprocessing:**")
+                    st.code(f"Original:\n{user_text[:150]}\n\nCleaned:\n{preprocess(user_text)[:150]}", language='text')
+            else:
+                st.warning("⚠️ Masukkan teks terlebih dahulu!")
+
+    with tab2:
+        bulk_text = st.text_area("Komentar (satu per baris):",
+            placeholder="Dosen sangat baik\nWifi sangat lambat\nKampus memiliki dua kantin", height=180)
+        if st.button("🚀 Analisis Semua", key="bulk"):
+            lines = [l.strip() for l in bulk_text.strip().split('\n') if l.strip()]
+            if lines:
+                with st.spinner(f"Menganalisis {len(lines)} komentar..."):
+                    results = predict_batch(lines, token)
+                    results['komentar'] = lines
+                for _, row in results.iterrows():
+                    c = COLOR_MAP[row['sentimen']]; em = EMOJI_MAP[row['sentimen']]
+                    st.markdown(f"""
+                    <div style='background:rgba(255,255,255,0.025);border-left:3px solid {c};
+                         border-radius:10px;padding:12px 16px;margin-bottom:8px;
+                         display:flex;justify-content:space-between;align-items:center'>
+                      <span style='font-size:13px;color:rgba(255,255,255,0.8)'>{row['komentar']}</span>
+                      <span style='background:{c}22;color:{c};padding:3px 12px;
+                            border-radius:20px;font-size:11px;font-weight:700;white-space:nowrap;margin-left:12px'>
+                        {em} {row['sentimen']} {row['confidence']}%
+                      </span>
+                    </div>""", unsafe_allow_html=True)
+                rc = results['sentimen'].value_counts()
+                st.markdown(f"""<br><div style='background:#0d1120;border:1px solid rgba(255,255,255,0.07);
+                border-radius:14px;padding:16px;display:flex;gap:20px;justify-content:center'>
+                  <span style='color:#39ff82;font-weight:800'>😊 {rc.get("Positif",0)}</span>
+                  <span style='color:#ffe600;font-weight:800'>😐 {rc.get("Netral",0)}</span>
+                  <span style='color:#ff2d78;font-weight:800'>😞 {rc.get("Negatif",0)}</span>
+                </div>""", unsafe_allow_html=True)
+
+# ════════════════════════════════════════════════════════════
+#  PAGE: TABEL DATA
+# ════════════════════════════════════════════════════════════
+elif page == "📋  Tabel Data":
+    st.markdown("### 📋 Tabel Lengkap Hasil Analisis")
+    c1,c2,c3 = st.columns(3)
+    with c1: f_sent = st.multiselect("Sentimen:",['Positif','Netral','Negatif'],default=['Positif','Netral','Negatif'])
+    with c2: f_kat  = st.multiselect("Kategori:", sorted(df['kategori'].unique()), default=sorted(df['kategori'].unique()))
+    with c3: min_conf = st.slider("Min. Confidence (%):", 0, 100, 0)
+    df_f = df[df['sentimen'].isin(f_sent) & df['kategori'].isin(f_kat) & (df['confidence']>=min_conf)]
+    st.caption(f"{len(df_f)} dari {n_total} komentar · Rata-rata confidence: {df_f['confidence'].mean():.1f}%")
+    def color_sent(val): return f"color:{COLOR_MAP.get(val,'white')};font-weight:700"
+    st.dataframe(
+        df_f[['id','tanggal','kategori','komentar','sentimen','confidence']]
+            .style.map(color_sent, subset=['sentimen']),
+        use_container_width=True, height=480)
+    col_dl1, col_dl2 = st.columns(2)
+    with col_dl1:
+        st.download_button("⬇️ Download CSV",
+            df_f.to_csv(index=False).encode('utf-8'),
+            "hasil_sentimen.csv","text/csv")
+    with col_dl2:
+        st.download_button("⬇️ Download JSON",
+            df_f.to_json(orient='records',force_ascii=False).encode('utf-8'),
+            "hasil_sentimen.json","application/json")
+
+# ── Footer ────────────────────────────────────────────────────
+st.markdown("""
+<div style='text-align:center;padding:32px 0 16px;
+     font-size:11px;color:rgba(255,255,255,0.18);font-family:DM Mono,monospace;line-height:2'>
+  Implementasi Analisis Sentimen Komentar Mahasiswa Berbasis IndoBERT<br>
+  Smart Campus Feedback System · EAS Kecerdasan Buatan 2025/2026 · UHAMKA 6A STI
+</div>""", unsafe_allow_html=True)
