@@ -134,10 +134,10 @@ def make_wc(words, cmap):
 
 def metric_card(label, value, color):
     st.markdown(f"""
-    <div style='background:#0d1120;border:1px solid rgba(255,255,255,.07);
+    <div style='background:#0d1120;border:1px solid rgba(255,255,255,0.07);
          border-radius:16px;padding:20px;text-align:center'>
       <div style='font-size:10px;text-transform:uppercase;letter-spacing:.1em;
-           color:rgba(255,255,255,.35);margin-bottom:8px;font-family:DM Mono,monospace'>{label}</div>
+           color:rgba(255,255,255,0.35);margin-bottom:8px;font-family:DM Mono,monospace'>{label}</div>
       <div style='font-size:38px;font-weight:800;line-height:1;color:{color}'>{value}</div>
     </div>""", unsafe_allow_html=True)
 
@@ -227,7 +227,7 @@ with st.sidebar:
            background:linear-gradient(135deg,#00f5ff,#39ff82);
            -webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-top:8px'>
         Smart Campus</div>
-      <div style='font-size:11px;color:rgba(255,255,255,.3)'>Feedback System · IndoBERT AI</div>
+      <div style='font-size:11px;color:rgba(255,255,255,0.3)'>Feedback System · IndoBERT AI</div>
     </div>""", unsafe_allow_html=True)
     st.divider()
 
@@ -241,7 +241,7 @@ with st.sidebar:
     ])
     st.divider()
     st.markdown("""
-    <div style='font-size:10px;color:rgba(255,255,255,.22);font-family:DM Mono,monospace;line-height:2.4'>
+    <div style='font-size:10px;color:rgba(255,255,255,0.22);font-family:DM Mono,monospace;line-height:2.4'>
     🤖 Model · IndoBERT (API)<br>
     ⚡ RAM  · ~150MB (ringan!)<br>
     📊 Data · 60 komentar<br>
@@ -254,9 +254,9 @@ with st.sidebar:
 # ════════════════════════════════════════════════════════════
 st.markdown("""
 <div style='background:linear-gradient(135deg,#0d1120,#111827);
-     border:1px solid rgba(255,255,255,.08);border-radius:22px;
+     border:1px solid rgba(255,255,255,0.08);border-radius:22px;
      padding:30px 36px;margin-bottom:24px'>
-  <div style='font-size:11px;letter-spacing:.14em;color:#00f5ff;
+  <div style='font-size:11px;letter-spacing:0.14em;color:#00f5ff;
        text-transform:uppercase;margin-bottom:10px;font-family:DM Mono,monospace'>
     ✦ NLP &amp; Sentiment Analysis · EAS Kecerdasan Buatan 2025/2026
   </div>
@@ -265,8 +265,8 @@ st.markdown("""
        -webkit-background-clip:text;-webkit-text-fill-color:transparent'>
     Smart Campus Feedback System
   </h1>
-  <p style='color:rgba(255,255,255,.4);font-size:13px;margin:0;line-height:1.6'>
-    Analisis sentimen komentar mahasiswa · <b style='color:rgba(255,255,255,.7)'>IndoBERT via HF API</b> ·
+  <p style='color:rgba(255,255,255,0.4);font-size:13px;margin:0;line-height:1.6'>
+    Analisis sentimen komentar mahasiswa · <b style='color:rgba(255,255,255,0.7)'>IndoBERT via HF API</b> ·
     Universitas Muhammadiyah Prof. Dr. Hamka · Kelas 6A STI
   </p>
 </div>
@@ -335,10 +335,10 @@ if page == "🏠  Dashboard":
             text=f"{round(n_pos/n_total*100)}%<br><span style='font-size:12px'>Positif</span>",
             x=0.5, y=0.5, showarrow=False, font=dict(size=22, color='#39ff82'))
         fig_pie.update_layout(
-            title=dict(text='Distribusi Sentimen', font=dict(color='white',size=14)),
+            title=dict(text='Distribusi Sentimen', font=dict(color='#ffffff',size=14)),
             paper_bgcolor='#0d1120', plot_bgcolor='#0d1120',
-            font=dict(color='rgba(255,255,255,.7)'),
-            legend=dict(bgcolor='transparent', orientation='h', y=-0.1),
+            font=dict(color='rgba(255,255,255,0.7)'),
+            legend=dict(orientation='h', y=-0.1),
             margin=dict(t=50,b=30,l=20,r=20), height=320)
         st.plotly_chart(fig_pie, use_container_width=True)
 
@@ -346,16 +346,16 @@ if page == "🏠  Dashboard":
         fig_gauge = go.Figure(go.Indicator(
             mode="gauge+number",
             value=score,
-            gauge={'axis':{'range':[-100,100],'tickcolor':'rgba(255,255,255,.3)'},
+            gauge={'axis':{'range':[-100,100],'tickcolor':'rgba(255,255,255,0.3)'},
                    'bar':{'color':'#00f5ff'},'bgcolor':'#0d1120',
                    'steps':[
-                       {'range':[-100,-33],'color':'rgba(255,45,120,.2)'},
-                       {'range':[-33,33],'color':'rgba(255,230,0,.15)'},
-                       {'range':[33,100],'color':'rgba(57,255,130,.2)'}]},
-            title={'text':"Skor Sentimen",'font':{'color':'white','size':13}},
+                       {'range':[-100,-33],'color':'rgba(255,45,120,0.2)'},
+                       {'range':[-33,33],'color':'rgba(255,230,0,0.15)'},
+                       {'range':[33,100],'color':'rgba(57,255,130,0.2)'}]},
+            title={'text':"Skor Sentimen",'font':{'color':'#ffffff','size':13}},
             number={'font':{'color':'#00f5ff','size':40}}))
         fig_gauge.update_layout(
-            paper_bgcolor='#0d1120', font=dict(color='rgba(255,255,255,.7)'),
+            paper_bgcolor='#0d1120', font=dict(color='rgba(255,255,255,0.7)'),
             margin=dict(t=60,b=20,l=30,r=30), height=320)
         st.plotly_chart(fig_gauge, use_container_width=True)
 
@@ -365,11 +365,10 @@ if page == "🏠  Dashboard":
                      title='Sentimen per Kategori')
     fig_bar.update_layout(
         paper_bgcolor='#0d1120', plot_bgcolor='#0d1120',
-        font=dict(color='rgba(255,255,255,.7)'),
-        title_font=dict(color='white',size=14),
-        legend=dict(bgcolor='transparent',title_text=''),
-        xaxis=dict(gridcolor='rgba(255,255,255,.05)',title=''),
-        yaxis=dict(gridcolor='rgba(255,255,255,.05)',title='Jumlah'),
+        font=dict(color='rgba(255,255,255,0.7)'),
+        title_font=dict(color='#ffffff',size=14),
+        xaxis=dict(gridcolor='rgba(255,255,255,0.05)',title=''),
+        yaxis=dict(gridcolor='rgba(255,255,255,0.05)',title='Jumlah'),
         margin=dict(t=50,b=20,l=20,r=20), height=300)
     st.plotly_chart(fig_bar, use_container_width=True)
 
@@ -379,21 +378,21 @@ if page == "🏠  Dashboard":
     best_kat  = df[df['sentimen']=='Positif']['kategori'].value_counts().idxmax() if n_pos > 0 else '-'
     st.markdown(f"""
     <div style='background:linear-gradient(135deg,#0d1120,#111827);
-         border:1px solid rgba(255,255,255,.08);border-radius:18px;padding:24px'>
-      <div style='font-size:11px;color:rgba(255,255,255,.35);text-transform:uppercase;
-           letter-spacing:.08em;margin-bottom:12px;font-family:DM Mono,monospace'>💡 Insight Otomatis</div>
+         border:1px solid rgba(255,255,255,0.08);border-radius:18px;padding:24px'>
+      <div style='font-size:11px;color:rgba(255,255,255,0.35);text-transform:uppercase;
+           letter-spacing:0.08em;margin-bottom:12px;font-family:DM Mono,monospace'>💡 Insight Otomatis</div>
       <div style='display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px'>
-        <div style='background:rgba(57,255,130,.07);border:1px solid rgba(57,255,130,.2);
+        <div style='background:rgba(57,255,130,0.07);border:1px solid rgba(57,255,130,0.2);
              border-radius:12px;padding:14px'>
           <div style='font-size:10px;color:#39ff82;margin-bottom:4px;font-family:DM Mono,monospace'>TERBAIK</div>
           <div style='font-size:18px;font-weight:800;color:white'>{best_kat}</div>
         </div>
-        <div style='background:rgba(255,45,120,.07);border:1px solid rgba(255,45,120,.2);
+        <div style='background:rgba(255,45,120,0.07);border:1px solid rgba(255,45,120,0.2);
              border-radius:12px;padding:14px'>
           <div style='font-size:10px;color:#ff2d78;margin-bottom:4px;font-family:DM Mono,monospace'>PERLU PERBAIKAN</div>
           <div style='font-size:18px;font-weight:800;color:white'>{worst_kat}</div>
         </div>
-        <div style='background:rgba(0,245,255,.07);border:1px solid rgba(0,245,255,.2);
+        <div style='background:rgba(0,245,255,0.07);border:1px solid rgba(0,245,255,0.2);
              border-radius:12px;padding:14px'>
           <div style='font-size:10px;color:#00f5ff;margin-bottom:4px;font-family:DM Mono,monospace'>KEPUASAN</div>
           <div style='font-size:18px;font-weight:800;color:white'>{round(n_pos/n_total*100)}%</div>
@@ -414,11 +413,10 @@ elif page == "📈  Tren & Kategori":
         fig_line.update_traces(line=dict(width=2.5))
         fig_line.update_layout(
             paper_bgcolor='#0d1120', plot_bgcolor='#0d1120',
-            font=dict(color='rgba(255,255,255,.7)'),
-            title_font=dict(color='white',size=14),
-            legend=dict(bgcolor='transparent',title_text=''),
-            xaxis=dict(gridcolor='rgba(255,255,255,.05)',title=''),
-            yaxis=dict(gridcolor='rgba(255,255,255,.05)',title='Jumlah'),
+            font=dict(color='rgba(255,255,255,0.7)'),
+            title_font=dict(color='#ffffff',size=14),
+            xaxis=dict(gridcolor='rgba(255,255,255,0.05)',title=''),
+            yaxis=dict(gridcolor='rgba(255,255,255,0.05)',title='Jumlah'),
             margin=dict(t=50,b=20,l=20,r=20), height=300)
         st.plotly_chart(fig_line, use_container_width=True)
 
@@ -428,8 +426,8 @@ elif page == "📈  Tren & Kategori":
                          title='Heatmap Kategori vs Sentimen')
     fig_heat.update_layout(
         paper_bgcolor='#0d1120', plot_bgcolor='#0d1120',
-        font=dict(color='rgba(255,255,255,.7)'),
-        title_font=dict(color='white',size=14),
+        font=dict(color='rgba(255,255,255,0.7)'),
+        title_font=dict(color='#ffffff',size=14),
         margin=dict(t=50,b=20,l=20,r=20), height=320)
     st.plotly_chart(fig_heat, use_container_width=True)
 
@@ -438,17 +436,14 @@ elif page == "📈  Tren & Kategori":
                      title='Distribusi Confidence per Kategori')
     fig_box.update_layout(
         paper_bgcolor='#0d1120', plot_bgcolor='#0d1120',
-        font=dict(color='rgba(255,255,255,.7)'),
-        title_font=dict(color='white',size=14),
-        legend=dict(bgcolor='transparent',title_text=''),
-        xaxis=dict(gridcolor='rgba(255,255,255,.05)',title=''),
-        yaxis=dict(gridcolor='rgba(255,255,255,.05)',title='Confidence (%)'),
+        font=dict(color='rgba(255,255,255,0.7)'),
+        title_font=dict(color='#ffffff',size=14),
+        xaxis=dict(gridcolor='rgba(255,255,255,0.05)',title=''),
+        yaxis=dict(gridcolor='rgba(255,255,255,0.05)',title='Confidence (%)'),
         margin=dict(t=50,b=20,l=20,r=20), height=320)
     st.plotly_chart(fig_box, use_container_width=True)
 
-# ════════════════════════════════════════════════════════════
-#  PAGE: WORD CLOUD
-# ════════════════════════════════════════════════════════════
+# ── WORD CLOUD & FOOTER TETAP SAMA KARENA SUDAH FIX ──
 elif page == "☁️   Word Cloud":
     st.markdown("### ☁️ Word Cloud & Kata Kunci per Sentimen")
     cmaps = {'Positif':'Greens','Netral':'cool','Negatif':'Reds'}
@@ -460,7 +455,7 @@ elif page == "☁️   Word Cloud":
             st.markdown(f"""
             <div style='text-align:center;padding:10px 0 8px;font-weight:800;
                  font-size:16px;color:{color}'>{EMOJI_MAP[sent]} {sent}
-              <span style='font-size:11px;color:rgba(255,255,255,.3);font-weight:400;
+              <span style='font-size:11px;color:rgba(255,255,255,0.3);font-weight:400;
                    font-family:DM Mono,monospace;margin-left:6px'>
                 {len(df[df['sentimen']==sent])} komentar
               </span>
@@ -477,15 +472,12 @@ elif page == "☁️   Word Cloud":
                               color_discrete_sequence=[color])
                 fig2.update_layout(
                     paper_bgcolor='#0d1120', plot_bgcolor='#0d1120',
-                    font=dict(color='rgba(255,255,255,.6)',size=11),
+                    font=dict(color='rgba(255,255,255,0.6)',size=11),
                     margin=dict(t=6,b=6,l=6,r=6), height=230, showlegend=False,
-                    xaxis=dict(gridcolor='rgba(255,255,255,.05)'),
-                    yaxis=dict(gridcolor='rgba(255,255,255,.05)'))
+                    xaxis=dict(gridcolor='rgba(255,255,255,0.05)'),
+                    yaxis=dict(gridcolor='rgba(255,255,255,0.05)'))
                 st.plotly_chart(fig2, use_container_width=True)
 
-# ════════════════════════════════════════════════════════════
-#  PAGE: DETAIL KOMENTAR
-# ════════════════════════════════════════════════════════════
 elif page == "💬  Detail Komentar":
     st.markdown("### 💬 Detail Komentar Mahasiswa")
     col_s, col_k = st.columns(2)
@@ -499,10 +491,10 @@ elif page == "💬  Detail Komentar":
         c  = COLOR_MAP[row['sentimen']]; em = EMOJI_MAP[row['sentimen']]
         conf_bar = int(row['confidence'])
         st.markdown(f"""
-        <div style='background:rgba(255,255,255,.025);border:1px solid rgba(255,255,255,.06);
+        <div style='background:rgba(255,255,255,0.025);border:1px solid rgba(255,255,255,0.06);
              border-left:3px solid {c};border-radius:14px;padding:16px 18px;margin-bottom:12px'>
           <div style='display:flex;justify-content:space-between;align-items:center;margin-bottom:10px'>
-            <span style='font-size:10px;color:rgba(255,255,255,.3);font-family:DM Mono,monospace'>
+            <span style='font-size:10px;color:rgba(255,255,255,0.3);font-family:DM Mono,monospace'>
               #{row['id']} · {row['kategori']} · {row['tanggal']}
             </span>
             <span style='background:{c}22;color:{c};padding:3px 12px;
@@ -510,17 +502,14 @@ elif page == "💬  Detail Komentar":
               {em} {row['sentimen']} · {row['confidence']}%
             </span>
           </div>
-          <div style='font-size:14px;color:rgba(255,255,255,.82);line-height:1.65;margin-bottom:10px'>
+          <div style='font-size:14px;color:rgba(255,255,255,0.82);line-height:1.65;margin-bottom:10px'>
             {row['komentar']}
           </div>
-          <div style='background:rgba(255,255,255,.05);border-radius:20px;height:4px'>
+          <div style='background:rgba(255,255,255,0.05);border-radius:20px;height:4px'>
             <div style='background:{c};border-radius:20px;height:4px;width:{conf_bar}%'></div>
           </div>
         </div>""", unsafe_allow_html=True)
 
-# ════════════════════════════════════════════════════════════
-#  PAGE: UJI TEKS BARU
-# ════════════════════════════════════════════════════════════
 elif page == "🔍  Uji Teks Baru":
     st.markdown("### 🔍 Analisis Komentar Baru secara Real-Time")
     tab1, tab2 = st.tabs(["✏️ Satu Komentar", "📋 Banyak Komentar"])
@@ -541,7 +530,7 @@ elif page == "🔍  Uji Teks Baru":
                       <div style='font-size:54px;margin-bottom:14px'>{emoji}</div>
                       <div style='font-size:24px;font-weight:800;color:{color};margin-bottom:6px'>{label}</div>
                       <div style='font-size:44px;font-weight:800;color:white'>{score_val}%</div>
-                      <div style='font-size:11px;color:rgba(255,255,255,.35);font-family:DM Mono,monospace'>
+                      <div style='font-size:11px;color:rgba(255,255,255,0.35);font-family:DM Mono,monospace'>
                         Confidence Score
                       </div>
                     </div>""", unsafe_allow_html=True)
@@ -563,26 +552,23 @@ elif page == "🔍  Uji Teks Baru":
                 for _, row in results.iterrows():
                     c = COLOR_MAP[row['sentimen']]; em = EMOJI_MAP[row['sentimen']]
                     st.markdown(f"""
-                    <div style='background:rgba(255,255,255,.025);border-left:3px solid {c};
+                    <div style='background:rgba(255,255,255,0.025);border-left:3px solid {c};
                          border-radius:10px;padding:12px 16px;margin-bottom:8px;
                          display:flex;justify-content:space-between;align-items:center'>
-                      <span style='font-size:13px;color:rgba(255,255,255,.8)'>{row['komentar']}</span>
+                      <span style='font-size:13px;color:rgba(255,255,255,0.8)'>{row['komentar']}</span>
                       <span style='background:{c}22;color:{c};padding:3px 12px;
                             border-radius:20px;font-size:11px;font-weight:700;white-space:nowrap;margin-left:12px'>
                         {em} {row['sentimen']} {row['confidence']}%
                       </span>
                     </div>""", unsafe_allow_html=True)
                 rc = results['sentimen'].value_counts()
-                st.markdown(f"""<br><div style='background:#0d1120;border:1px solid rgba(255,255,255,.07);
+                st.markdown(f"""<br><div style='background:#0d1120;border:1px solid rgba(255,255,255,0.07);
                 border-radius:14px;padding:16px;display:flex;gap:20px;justify-content:center'>
                   <span style='color:#39ff82;font-weight:800'>😊 {rc.get("Positif",0)}</span>
                   <span style='color:#ffe600;font-weight:800'>😐 {rc.get("Netral",0)}</span>
                   <span style='color:#ff2d78;font-weight:800'>😞 {rc.get("Negatif",0)}</span>
                 </div>""", unsafe_allow_html=True)
 
-# ════════════════════════════════════════════════════════════
-#  PAGE: TABEL DATA
-# ════════════════════════════════════════════════════════════
 elif page == "📋  Tabel Data":
     st.markdown("### 📋 Tabel Lengkap Hasil Analisis")
     c1,c2,c3 = st.columns(3)
@@ -606,10 +592,9 @@ elif page == "📋  Tabel Data":
             df_f.to_json(orient='records',force_ascii=False).encode('utf-8'),
             "hasil_sentimen.json","application/json")
 
-# ── Footer ────────────────────────────────────────────────────
 st.markdown("""
 <div style='text-align:center;padding:32px 0 16px;
-     font-size:11px;color:rgba(255,255,255,.18);font-family:DM Mono,monospace;line-height:2'>
+     font-size:11px;color:rgba(255,255,255,0.18);font-family:DM Mono,monospace;line-height:2'>
   Implementasi Analisis Sentimen Komentar Mahasiswa Berbasis IndoBERT<br>
   Smart Campus Feedback System · EAS Kecerdasan Buatan 2025/2026 · UHAMKA 6A STI
 </div>""", unsafe_allow_html=True)
