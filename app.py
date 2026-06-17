@@ -47,7 +47,8 @@ h1,h2,h3{ font-family:'Syne',sans-serif !important; font-weight:800 !important; 
 """, unsafe_allow_html=True)
 
 # ── Constants ────────────────────────────────────────────────
-API_URL   = "https://api-inference.huggingface.co/models/mdhugol/indonesia-bert-sentiment-classifier"
+# PERBAIKAN URL AI DI BAWAH INI (classification, bukan classifier)
+API_URL   = "https://api-inference.huggingface.co/models/mdhugol/indonesia-bert-sentiment-classification"
 LABEL_MAP = {'LABEL_0':'Positif','LABEL_1':'Netral','LABEL_2':'Negatif'}
 COLOR_MAP = {'Positif':'#39ff82','Netral':'#ffe600','Negatif':'#ff2d78'}
 EMOJI_MAP = {'Positif':'😊','Netral':'😐','Negatif':'😞'}
@@ -312,7 +313,7 @@ if uploaded:
 # Cache hasil prediksi agar tidak call API berulang
 cache_key = "pred_cache"
 if cache_key not in st.session_state or len(st.session_state[cache_key]) != len(df_raw):
-    with st.spinner("🤖 Menganalisis sentimen dengan IndoBERT... (30–60 detik pertama kali)"):
+    with st.spinner("🤖 Menganalisis sentimen dengan IndoBERT... (Tunggu sebentar jika model baru menyala)"):
         pred = predict_batch(df_raw['komentar'].tolist(), token)
     st.session_state[cache_key] = pred
     st.success("✅ Analisis selesai!")
